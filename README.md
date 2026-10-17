@@ -2,7 +2,7 @@
 ### The trust agent that shows its work.
 > Built for the **Graph Hacks Hackathon** by WeMakeDevs & FalkorDB  
 > **Tracks Entered:** Track 1 (*Agents That Act on Connected Data*) & Track 2 (*Agent Memory and Coordination*)  
-> **Builder:** Khalid ([The Web3 Wizard](https://github.com/khalid))
+> **Builder:** Khalid ([The Web3 Wizard](https://github.com/theweb3wizard))
 
 ---
 
@@ -185,7 +185,7 @@ Hardcoded demos cannot run backwards. Live graphs do.
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/khalid/clearpath.git
+git clone https://github.com/theweb3wizard/clearpath.git
 cd clearpath
 npm install
 ```
