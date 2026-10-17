@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getTrustGraph, getMemoryGraph } from '@/lib/falkordb';
 import { CYPHER_QUERIES } from '@/lib/queries';
 import { computeVerdict, generateExplanationText } from '@/lib/score';
+import { runGeminiAgentReasoning } from '@/lib/gemini';
 import { CypherExecutionLog, MCPToolLog, ScanResult, TaintPath } from '@/lib/types';
 
 export async function POST(req: NextRequest) {
@@ -192,8 +193,22 @@ export async function POST(req: NextRequest) {
       attestationWeightSum: attestations.reduce((a: number, b: { weight: number }) => a + b.weight, 0)
     });
 
-    // Human-Readable Explanation
-    const explanation = generateExplanationText(
+    // Human-Readable Explanation via Gemini 2.5 Flash Agent (with deterministic fallback)
+    const geminiRes = await runGeminiAgentReasoning({
+      targetAddress,
+      tier: scoreOutput.tier,
+      exposureRatio: scoreOutput.exposureRatio,
+      totalInflow,
+      accountAgeDays: scoreOutput.accountAgeDays,
+      paths: taintPaths,
+      priorScan: priorScanTimestamp ? {
+        priorVerdict: priorVerdict || 'NO-KNOWN-RISK',
+        priorTimestamp: priorScanTimestamp,
+        alertMessage: memoryDelta?.alertMessage
+      } : undefined
+    });
+
+    const explanation = geminiRes.verdictExplanation || generateExplanationText(
       scoreOutput.tier,
       scoreOutput.exposureRatio,
       taintPaths,
@@ -234,6 +249,7 @@ export async function POST(req: NextRequest) {
       confidence: scoreOutput.confidence,
       paths: taintPaths,
       explanation,
+      investigationTrace: geminiRes.investigationTrace,
       cypherQueries: cypherLogs,
       mcpToolsCited: mcpLogs,
       memoryDelta,

@@ -41,6 +41,14 @@ export interface MCPToolLog {
   resultSummary: string;
 }
 
+export interface AgentInvestigationStep {
+  step: number;
+  title: string;
+  thought: string;
+  tool: string;
+  observation: string;
+}
+
 export interface MemoryDelta {
   priorScanTimestamp?: number;
   priorVerdict?: VerdictTier;
@@ -59,6 +67,7 @@ export interface ScanResult {
   confidence: number;
   paths: TaintPath[];
   explanation: string;
+  investigationTrace?: AgentInvestigationStep[];
   cypherQueries: CypherExecutionLog[];
   mcpToolsCited: MCPToolLog[];
   memoryDelta?: MemoryDelta;
