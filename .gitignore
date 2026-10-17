@@ -33,3 +33,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal research and planning notes
+EXECUTION_PLAN.md
+GRILL.md
+HANDOFF.md
+IDEA.md
+OPENCODE_MASTER_PROMPT.md
+PROJECT_BRIEF.md
+RESEARCH.md
+RULES.md
+STATUS.md
+WINNERS.md
+DEMO_SCRIPT.md
+DEVTO_BLOG_POST.md
